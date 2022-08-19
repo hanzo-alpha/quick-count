@@ -7,6 +7,7 @@ use App\Models\Kecamatan;
 
 class HomeController extends Controller
 {
+
   /**
    * Create a new controller instance.
    *
