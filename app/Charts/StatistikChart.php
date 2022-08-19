@@ -1,16 +1,18 @@
 <?php
 
-  declare(strict_types=1);
+declare(strict_types=1);
 
-  namespace App\Charts;
+namespace App\Charts;
 
-  use App\Models\HitungCepat;
-  use Chartisan\PHP\Chartisan;
-  use ConsoleTVs\Charts\BaseChart;
-  use Illuminate\Http\Request;
+use App\Models\HitungCepat;
 
-  class StatistikChart extends BaseChart
-  {
+//use Chartisan\PHP\Chartisan;
+//  use ConsoleTVs\Charts\BaseChart;
+use ConsoleTVs\Charts\Classes\Chartjs\Chart;
+use Illuminate\Http\Request;
+
+class StatistikChart extends Chart
+{
     /**
      * Determines the chart name to be used on the
      * route. If null, the name will be a snake_case
@@ -39,33 +41,32 @@
 //    public ?array $middlewares = ['auth','guest'];
 
     /**
-     * Handles the HTTP request for the given chart.
-     * It must always return an instance of Chartisan
-     * and never a string or an array.
+     * Initializes the chart.
      *
-     * @param  Request  $request
-     * @return Chartisan
+     * @return void
      */
-    public function handler(Request $request): Chartisan
+    public function __construct()
     {
-      $chart = collect();
-      $suara1 = 0;
-      $suara2 = 0;
-      $namaCalon1 = 'Suara Pasangan Calon';
-      $namaCalon2 = 'Suara Kolom Kosong';
-      $hitung = HitungCepat::select(['nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
+        parent::__construct();
 
-      foreach ($hitung as $item) {
-        $suara1 += $item->suara1;
-        $suara2 += $item->suara2;
-
-        $chart->put('suara1',$item->suara1);
-        $chart->put('suara2',$item->suara2);
-      }
-
-      return Chartisan::build()
-        ->labels(['Jumlah Suara'])
-        ->dataset($namaCalon1, [$suara1])
-        ->dataset($namaCalon2, [$suara2]);
+//        $chart = collect();
+//        $suara1 = 0;
+//        $suara2 = 0;
+//        $namaCalon1 = 'Suara Pasangan Calon';
+//        $namaCalon2 = 'Suara Kolom Kosong';
+//        $hitung = HitungCepat::select(['nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
+//
+//        foreach ($hitung as $item) {
+//            $suara1 += $item->suara1;
+//            $suara2 += $item->suara2;
+//
+//            $chart->put('suara1', $item->suara1);
+//            $chart->put('suara2', $item->suara2);
+//        }
+//
+//        return Chartisan::build()
+//            ->labels(['Jumlah Suara'])
+//            ->dataset($namaCalon1, [$suara1])
+//            ->dataset($namaCalon2, [$suara2]);
     }
-  }
+}

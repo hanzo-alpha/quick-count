@@ -8,7 +8,7 @@
 
 @endsection
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+{{--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">--}}
     <style>
         .card-body {
             padding: 1.5rem;
@@ -60,6 +60,23 @@
 @section('content')
     <!-- Widgets Statistics start -->
     <section id="dashboard-analytics">
+        <div class="row p-1">
+            <div class="col-md-12 col-sm-12">
+                <div class="d-flex flex-wrap align-items-start justify-content-between">
+                    <div>
+                        <h1>DASHBOARD QUICK COUNT</h1>
+                    </div>
+                    <div>
+                        @auth()
+                            <a href="{{ route('home') }}" class="btn btn-primary">Dashboard</a>
+                        @endauth
+                        @guest()
+                            <a href="{{ route('login') }}" class="btn btn-primary">Masuk</a>
+                        @endguest
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Website Analytics Starts-->
         <div class="row">
             <div class="col-md-9 col-sm-12">
@@ -70,13 +87,19 @@
                     </div>
                     <div class="card-content">
                         <div class="card-body pb-1">
-                            <div id="chart" style="height: 600px"></div>
+{{--                            <div id="chart" style="height: 600px"></div>--}}
+                            <div style="height: 50.5rem;">
+                                <livewire:livewire-column-chart
+                                    key="{{ $columnChartModel->reactiveKey() }}"
+                                    :column-chart-model="$columnChartModel"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-12">
-                @livewire('pilkada.hitung-cepat',['hitung' => $hitung,'refreshInSeconds' => 60])
+                @livewire('pilkada.hitung-cepat',['refreshInSeconds' => 60])
             </div>
         </div>
         <div class="row">
@@ -89,36 +112,41 @@
                     <div class="card-content">
                         <div class="card-body pb-1">
                             <div class="d-flex justify-content-around align-items-center flex-wrap">
-                                @foreach($kecamatan as $kec)
+                                @foreach($suaraPerKecamatan as $name => $kec)
                                     @php
-                                        $suara1 = $kec->hitung()->get()->sum('suara1');
-                                        $suara2 = $kec->hitung()->get()->sum('suara2');
-                                        $persentasi1 = ($suara1 / $totalDpt) * 100;
-                                        $persentasi2 = ($suara2 / $totalDpt) * 100
+                                        $totalDpt = config('global.total_dpt');
+                                        $suara1 = $kec->sum('suara1');
+                                        $suara2 = $kec->sum('suara2');
+                                        $suaraTidakSah = $kec->sum('suara_tidak_sah');
+                                        $totalSuaraSah = ($suara1 + $suara2) - $suaraTidakSah;
+                                        $persentase1 = 0;
+                                        $persentase2 = 0;
                                     @endphp
                                     <div class="user-analytics">
                                         <i class="bx bx-user-voice mr-25 align-middle"></i>
-                                        <span class="align-middle text-muted">Kec. {{ $kec->name }}</span>
+                                        <span class="align-middle text-muted">Kec. {{ $name }}</span>
                                         <div class="d-flex justify-content-center">
                                             <h3 class="mt-1 ml-50 text-warning">
                                                 {{ number_format($suara1,0,',','.') }} /
                                                 <span class="text-primary">
-                          {{ number_format($suara2,0,',','.')}}
-                        </span>
+                                                    {{ number_format($suara2,0,',','.')}}
+                                                </span>
                                             </h3>
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <h3 class="mt-1 ml-50 text-warning">
-                                                {{ number_format($persentasi1,2,',','.') }} % /
+                                                {{ number_format($persentase1,2,',','.') }} % /
                                                 <span class="text-primary">
-                          {{ number_format($persentasi2,2,',','.')}} %
-                        </span>
+                                                  {{ number_format($persentase2,2,',','.')}} %
+                                                </span>
                                             </h3>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            <div id="kecamatan-chart" style="height: 500px;"></div>
+                            <div style="height: 500px;">
+                                {!! $kecChart->container() !!}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,64 +160,14 @@
 @section('vendor-scripts')
     <script src="{{asset('vendors/js/extensions/dragula.min.js')}}"></script>
     <script src="{{asset('vendors/js/extensions/swiper.min.js')}}"></script>
-    <!-- Charting library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
-    <!-- Chartisan -->
-    <script src="https://unpkg.com/@chartisan/chartjs@^2.1.0/dist/chartisan_chartjs.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 @endsection
 
 @section('page-scripts')
+    {!! $kecChart->script() !!}
+    @livewireChartsScripts
     <script src="{{asset('js/scripts/footer.js')}}"></script>
-    {{--<script src="{{asset('js/scripts/pages/dashboard-analytics.js')}}"></script>--}}
     <script>
-        const chart = new Chartisan({
-            el: '#chart',
-            url: "@chart('statistik_chart')",
-            hooks: new ChartisanHooks()
-                .colors(['rgba(236,201,75,0.69)', 'rgba(66,153,225,0.76)', 'rgba(75, 192, 192, 0.2)'])
-                // .colors(['rgba(236,201,75,0.69)', 'rgba(0,255,102,0.8)', 'rgba(66,153,225,0.76)'])
-                .responsive()
-                .legend({position: 'bottom'})
-                .beginAtZero()
-                .options({
-                    datalabels: {
-                        color: 'rgba(236,201,75,0.69)'
-                    }
-                })
-                .datasets([
-                    {type: 'bar',}
-                ])
-        })
-
-        const kecChart = new Chartisan({
-            el: '#kecamatan-chart',
-            url: "@chart('rekap_kecamatan_chart')",
-            hooks: new ChartisanHooks()
-                .colors(['rgba(236,201,75,0.69)', 'rgba(66,153,225,0.76)', 'rgba(75, 192, 192, 0.2)'])
-                .responsive()
-                .legend({position: 'bottom'})
-                .beginAtZero()
-                .datasets([
-                    {type: 'bar'}
-                ])
-        });
-
-        setInterval(function () {
-            chart.update({background: true});
-            kecChart.update({background: true});
-        }, 5000);
-
-        /*window.livewire.on('chartUpdate', (chartId, labels, datasets) => {
-          let chart = window[chartId].chart;
-
-          chart.data.datasets.forEach((dataset, key) => {
-            dataset.data = datasets[key];
-          });
-
-          chart.data.labels = labels;
-
-          chart.update();
-        });*/
 
     </script>
 @endsection

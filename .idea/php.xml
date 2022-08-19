@@ -169,6 +169,8 @@
       <path value="$PROJECT_DIR$/vendor/dragon-code/contracts" />
       <path value="$PROJECT_DIR$/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/vendor/_laravel_idea" />
+      <path value="$PROJECT_DIR$/vendor/asantibanez/livewire-charts" />
+      <path value="$PROJECT_DIR$/vendor/balping/json-raw-encoder" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

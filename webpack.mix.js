@@ -90,13 +90,13 @@ mix.then(() => {
         // exec('./node_modules/rtlcss/bin/rtlcss.js -d -e ".css" ./public/css/ ./public/css/');
     }
 });
-// if (mix.inProduction()) {
-//     mix.version();
-//     mix.webpackConfig({
-//         output: {
-//             publicPath: '/materialize-material-design-admin-template/laravel/demo-1/'
-//         }
-//     });
-//     mix.setResourceRoot("/materialize-material-design-admin-template/laravel/demo-1/");
-// }
-mix.version();
+if (mix.inProduction()) {
+    mix.version();
+    // mix.webpackConfig({
+    //     output: {
+    //         publicPath: '/materialize-material-design-admin-template/laravel/demo-1/'
+    //     }
+    // });
+    // mix.setResourceRoot("/materialize-material-design-admin-template/laravel/demo-1/");
+}
+// mix.version();

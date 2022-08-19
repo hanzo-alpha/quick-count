@@ -177,6 +177,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/dragon-code/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/graham-campbell/result-type" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/_laravel_idea" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/asantibanez/livewire-charts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/balping/json-raw-encoder" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

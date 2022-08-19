@@ -22,11 +22,15 @@
 //    protected $data = '';
 
     public $fillable = [
-      'kecamatan', 'desa', 'calon1_id', 'calon2_id', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah', 'no_tps', 'status','dpt'
+      'kabupaten','kecamatan', 'desa', 'calon1_id', 'calon2_id', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah', 'no_tps', 'status','dpt'
+    ];
+
+    protected $attributes = [
+        'kabupaten' => '7312'
     ];
 
     protected $casts = [
-
+        'status' => 'bool',
     ];
 
     public function calon(): HasOne
@@ -39,7 +43,12 @@
       return $this->hasOne(Tps::class, 'id', 'tps_id');
     }
 
-    public function kecamatan(): BelongsTo
+      public function kabupaten(): BelongsTo
+      {
+          return $this->belongsTo(Kota::class, 'kabupaten', 'code');
+      }
+
+    public function kec(): BelongsTo
     {
       return $this->belongsTo(Kecamatan::class, 'kecamatan', 'code');
     }
