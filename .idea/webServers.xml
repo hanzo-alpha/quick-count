@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e7387d62-6f1f-4552-bb97-e7c685819aa3" name="resometoda" url="https://pilkada.resometoda.com">
+        <fileTransfer rootFolder="/laravel" accessType="FTPS" host="119.235.254.78" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

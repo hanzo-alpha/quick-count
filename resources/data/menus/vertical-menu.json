@@ -1,0 +1,59 @@
+{
+  "menu": [
+    {
+      "url": "home",
+      "name": "Dashboard",
+      "i18n": "Dashboard",
+      "icon": "desktop"
+    },
+    {
+      "url": "hitung-cepat",
+      "name": "Hitung Cepat",
+      "i18n": "Hitung Cepat",
+      "slug": "hitung-cepat",
+      "icon": "calculator"
+    },
+    {
+      "url": "#",
+      "name": "Master Data",
+      "i18n": "Master Data",
+      "icon": "servers",
+      "submenu": [
+        {
+          "url": "data-tps",
+          "name": "Data TPS",
+          "i18n": "Data TPS",
+          "slug": "data-tps",
+          "icon": "bx bx-right-arrow-alt"
+        },
+        {
+          "url": "data-calon",
+          "name": "Data Calon",
+          "i18n": "Data Calon",
+          "slug": "data-calon",
+          "icon": "bx bx-right-arrow-alt"
+        }
+      ]
+    },
+    {
+      "url": "#",
+      "name": "Pengaturan",
+      "i18n": "Pengaturan",
+      "icon": "gear",
+      "submenu": [
+        {
+          "url": "pengguna",
+          "name": "Pengguna",
+          "i18n": "Pengguna",
+          "icon": "bx bx-right-arrow-alt"
+        },
+        {
+          "url": "sistem",
+          "name": "Sistem",
+          "i18n": "Sistem",
+          "icon": "bx bx-right-arrow-alt"
+        }
+      ]
+    }
+  ]
+}

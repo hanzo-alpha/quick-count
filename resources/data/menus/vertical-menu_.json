@@ -1,0 +1,72 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "i18n": "Dashboard",
+      "icon": "desktop"
+    },
+    {
+      "url": "data-tps",
+      "name": "Data TPS",
+      "i18n": "Data TPS",
+      "slug": "data-tps",
+      "icon": "servers"
+    },
+    {
+      "url": "data-calon",
+      "name": "Data Calon",
+      "i18n": "Data Calon",
+      "slug": "data-calon",
+      "icon": "users"
+    },
+    {
+      "url": "data-suara-calon",
+      "name": "Data Suara Calon",
+      "i18n": "Data Suara Calon",
+      "slug": "data-suara-calon",
+      "icon": "morph-microphone"
+    },
+    {
+      "url": "tim-relawan",
+      "name": "Tim Relawan",
+      "i18n": "Tim Relawan",
+      "slug": "tim-relawan",
+      "icon": "user"
+    },
+    {
+      "url": "pemetaan-dukungan",
+      "name": "Pemetaan Dukungan",
+      "i18n": "Pemetaan Dukungan",
+      "slug": "pemetaan-dukungan",
+      "icon": "globe"
+    },
+    {
+      "url": "rekap-tps",
+      "name": "Rekap TPS",
+      "i18n": "Rekap TPS",
+      "slug": "rekap-tps",
+      "icon": "bar-chart"
+    },
+    {
+      "url": "#",
+      "name": "Pengaturan",
+      "i18n": "Pengaturan",
+      "icon": "gear",
+      "submenu": [
+        {
+          "url": "pengguna",
+          "name": "Pengguna",
+          "i18n": "Pengguna",
+          "icon": "bx bx-right-arrow-alt"
+        },
+        {
+          "url": "sistem",
+          "name": "Sistem",
+          "i18n": "Sistem",
+          "icon": "bx bx-right-arrow-alt"
+        }
+      ]
+    }
+  ]
+}

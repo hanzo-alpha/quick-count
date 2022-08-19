@@ -1,0 +1,27 @@
+/node_modules
+/public/hot
+/public/storage
+/public/assets
+/public/data
+/public/fonts
+/public/images
+public/css/*
+public/js/*
+/public/vendors
+/storage/*.key
+/vendor
+.lasso
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+!/_ide_helper_models.php
+mix-manifest.json
+.lasso
+
+# Project exclude paths
+/storage/app/
+/storage/debugbar/
+/storage/framework/

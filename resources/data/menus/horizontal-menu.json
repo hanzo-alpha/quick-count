@@ -1,0 +1,79 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "i18n": "Dashboard",
+      "slug": "dashboard",
+      "icon": "desktop",
+      "dropdown": "1"
+    },{
+      "url": "/mesin",
+      "name": "Mesin",
+      "i18n": "Mesin",
+      "slug": "data-mesin",
+      "icon": "desktop",
+      "dropdown": "1"
+    },
+    {
+      "url": "#",
+      "name": "Starter kit",
+      "i18n": "Starter kit",
+      "slug": "",
+      "icon": "unlink",
+      "submenu": [
+        {
+          "url": "sk-layout-1-column",
+          "name": "1 column",
+          "i18n": "1 column",
+          "icon": "bx bx-right-arrow-alt",
+          "slug": "1-column"
+        },
+        {
+          "url": "sk-layout-2-columns",
+          "name": "2 columns",
+          "i18n": "2 columns",
+          "icon": "bx bx-right-arrow-alt",
+          "slug": "2-columns"
+        },
+        {
+          "url": "fixed-navbar",
+          "name": "Fixed navbar",
+          "i18n": "Fixed navbar",
+          "icon": "bx bx-right-arrow-alt",
+          "slug": "fixed-navbar"
+        },
+        {
+          "url": "sk-layout-fixed",
+          "name": "Fixed layout",
+          "i18n": "Fixed layout",
+          "icon": "bx bx-right-arrow-alt",
+          "slug": "fixed"
+        },
+        {
+          "url": "sk-layout-static",
+          "name": "Static layout",
+          "i18n": "Static layout",
+          "icon": "bx bx-right-arrow-alt",
+          "slug": "static"
+        }
+      ]
+    },
+    {
+      "url": "https://pixinvent.com/demo/frest-clean-bootstrap-admin-dashboard-template/documentation",
+      "name": "Documentation",
+      "i18n": "Documentation",
+      "slug": "documentation",
+      "icon": "morph-folder",
+      "newTab":"_blank"
+    },
+    {
+      "url": "https://pixinvent.ticksy.com/",
+      "name": "Raise Support",
+      "i18n": "Raise Support",
+      "slug": "support-raise-support",
+      "icon": "help",
+      "newTab":"_blank"
+    }
+  ]
+}
