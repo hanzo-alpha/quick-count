@@ -6,7 +6,7 @@ use App\Charts\RekapKecamatanChart;
 use App\Charts\StatistikChart;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Carbon\Carbon;
-use ConsoleTVs\Charts\Registrar as Charts;
+//use ConsoleTVs\Charts\Registrar as Charts;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
    *
    * @return void
      */
-    public function register()
+    public function register(): void
     {
         if ($this->app->environment() !== 'production') {
           $this->app->register(IdeHelperServiceProvider::class);
@@ -26,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      *
-     * @param  Charts  $charts
      * @return void
      */
     public function boot()

@@ -8,6 +8,7 @@
 
 namespace App\Helpers;
 
+use ArrayAccess;
 use Auth;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -29,10 +30,8 @@ if (!function_exists('set_active')) {
                     return $output;
                 }
             }
-        } else {
-            if (Route::is($uri)) {
-                return $output;
-            }
+        } elseif (Route::is($uri)) {
+            return $output;
         }
     }
 }
@@ -49,10 +48,8 @@ if (!function_exists('set_show')) {
                     return $output;
                 }
             }
-        } else {
-            if (Route::is($uri)) {
-                return $output;
-            }
+        } elseif (Route::is($uri)) {
+            return $output;
         }
     }
 }
@@ -90,9 +87,9 @@ if (!function_exists('isVerifikator')) {
 *   $attributes    An array of additional HTML attributes
 */
 if (!function_exists('renderSelectOpt')) {
-    function renderSelectOpt()
+    function renderSelectOpt(): void
     {
-        Form::macro('selectOpt', function (
+        Form::macro('selectOpt', static function (
             ArrayAccess $collection,
             $name,
             $groupBy,
@@ -148,7 +145,7 @@ if (!function_exists('url_foto_pegawai')) {
 }
 
 if (!function_exists('url_foto_user')) {
-    function url_foto_user($filename, $thumb = false, $check = true)
+    function url_foto_user($filename, $thumb = false, $check = true): false|string
     {
         $path = 'uploads/userphoto/';
         $no_path = !$thumb ? 'assets/img/nophoto-large.jpg' : 'assets/img/nophoto-small.jpg';
@@ -161,9 +158,9 @@ if (!function_exists('url_foto_user')) {
         $path .= $filename;
         if ($check) {
             return file_exists('./'.$path) ? file_get_contents(env('SIMPEG_URL_FOTO').$path) : env('SIMPEG_URL_FOTO').$no_path;
-        } else {
-            return env('SIMPEG_PEGAWAI_FOTO').$path;
         }
+
+        return env('SIMPEG_PEGAWAI_FOTO').$path;
     }
 }
 
@@ -247,37 +244,28 @@ if (!function_exists('kekata')) {
 }
 
 if (!function_exists('terbilang')) {
-    function terbilang($x, $style = 4)
+    function terbilang($x, $style = 4): string
     {
         if ($x < 0) {
             $hasil = 'minus '.trim(kekata($x));
         } else {
             $hasil = trim(kekata($x));
         }
-        switch ($style) {
-            case 1:
-                $hasil = strtoupper($hasil);
-                break;
-            case 2:
-                $hasil = strtolower($hasil);
-                break;
-            case 3:
-                $hasil = ucwords($hasil);
-                break;
-            default:
-                $hasil = ucfirst($hasil);
-                break;
-        }
-        return $hasil;
+        return match ($style) {
+            1 => strtoupper($hasil),
+            2 => strtolower($hasil),
+            3 => ucwords($hasil),
+            default => ucfirst($hasil),
+        };
     }
 }
 
 if (!function_exists('ucname')) {
-    function ucname($str)
+    function ucname($str): string
     {
         $string = ucwords(strtolower($str));
         foreach (['-', '\'', '.'] as $delimiter) {
-            if (strpos($string, $delimiter) !== false) {
+            if (str_contains($string, $delimiter)) {
                 $string = implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
             }
         }
@@ -286,7 +274,7 @@ if (!function_exists('ucname')) {
 }
 
 if (!function_exists('list_ya_tidak')) {
-    function list_ya_tidak($first_empty = false)
+    function list_ya_tidak($first_empty = false): array
     {
         $arr = ['Y' => 'Ya', 'N' => 'Tidak'];
         return ($first_empty === false) ? $arr : ['' => $first_empty] + $arr;
@@ -294,9 +282,9 @@ if (!function_exists('list_ya_tidak')) {
 }
 
 if (!function_exists('list_jam_hadir')) {
-    function list_jam_hadir($first_empty = false, $tipe_rumpun = 'A')
+    function list_jam_hadir($first_empty = false, $tipe_rumpun = 'A'): array
     {
-        $pembagi = ($tipe_rumpun === 'B') ? (double) 6 : (double) 5;
+        $pembagi = ($tipe_rumpun === 'B') ? 6.0 : 5.0;
         $arr = [];
         for ($i = 0; $i <= $pembagi; $i += 0.5) {
             $arr[(string) $i] = str_replace('.', ',', $i);
@@ -306,13 +294,12 @@ if (!function_exists('list_jam_hadir')) {
 }
 
 if (!function_exists('hours_between')) {
-    function hours_between($datetime1, $datetime2)
+    function hours_between($datetime1, $datetime2): float
     {
         $datetime1 = strtotime($datetime1);
         $datetime2 = strtotime($datetime2);
         $interval = abs($datetime2 - $datetime1);
-        $hours = round($interval / 60 / 60);
-        return $hours;
+        return round($interval / 60 / 60);
     }
 }
 
@@ -348,18 +335,18 @@ if (!function_exists('add_nol')) {
     {
         if (strlen($str) > $jumnol) {
             return $str;
-        } else {
-            $res = '';
-            $n = $jumnol - strlen($str);
-//            $res .= repeater('0', $n);
-            $res .= str_repeat('0', $n);
-            return $res.$str;
         }
+
+        $res = '';
+        $n = $jumnol - strlen($str);
+//            $res .= repeater('0', $n);
+        $res .= str_repeat('0', $n);
+        return $res.$str;
     }
 }
 
 if (!function_exists('list_tanggal_kerja')) {
-    function list_tanggal_kerja($jumlah, $batas = null)
+    function list_tanggal_kerja($jumlah, $batas = null): array
     {
         if (!$batas) {
             $batas = date('Y-m-d');
@@ -400,10 +387,11 @@ if (!function_exists('range_tanggal_kerja')) {
                 $d = date('N', strtotime($ymd));
                 if (!$harikerja6 && ($d === '7' || $d === '6')) {
                     continue;
-                } // hari minggu & sabtu
-                elseif ($harikerja6 && $d === '7') {
+                }
+
+                if ($harikerja6 && $d === '7') {
                     continue;
-                } // hari minggu
+                } // hari minggu & sabtu // hari minggu
                 if (in_array($ymd, $libur, true)) {
                     continue;
                 }
@@ -438,7 +426,7 @@ if (!function_exists('list_tanggal_libur')) {
 }
 
 if (!function_exists('list_absen')) {
-    function list_absen($singkat = false, $first_empty = false)
+    function list_absen($singkat = false, $first_empty = false): array
     {
         if ($singkat) {
             $arr = [1 => 'H', 2 => 'I', 3 => 'S', 4 => 'C', 5 => 'D', 6 => 'TK'];
@@ -451,13 +439,13 @@ if (!function_exists('list_absen')) {
 }
 
 if (!function_exists('ribuan')) {
-    function ribuan($num = 0, $decimal = 'auto 2')
+    function ribuan($num = 0, $decimal = 'auto 2'): array|string
     {
         if (empty($num)) {
             return '0';
         }
         $auto = false;
-        if (substr($decimal, 0, 4) === 'auto') {
+        if (str_starts_with($decimal, 'auto')) {
             [, $decimal] = explode(' ', $decimal);
             $auto = true;
         }
@@ -478,7 +466,7 @@ if (!function_exists('format_angka')) {
 }
 
 if (!function_exists('hitung_ketepatan_laporan')) {
-    function hitung_ketepatan_laporan($tipe, $nilai_tpp)
+    function hitung_ketepatan_laporan($tipe, $nilai_tpp): float
     {
         $tipe = (int) $tipe ?: 3;
 
@@ -487,10 +475,8 @@ if (!function_exists('hitung_ketepatan_laporan')) {
 //                $nilai_tpp = round((double) $nilai_tpp * (settings('ekn_tepat_lapor') / 100), 2);
         } elseif ($tipe === 2) {
             $nilai_tpp = round((double) $nilai_tpp * (settings('ekn_telat_lapor') / 100), 2);
-        } else {
-            if ($nilai_tpp > 0) {
-                --$nilai_tpp;
-            }
+        } elseif ($nilai_tpp > 0) {
+            --$nilai_tpp;
         }
 
         return (double) $nilai_tpp;
@@ -498,7 +484,7 @@ if (!function_exists('hitung_ketepatan_laporan')) {
 }
 
 if (!function_exists('hitung_nilaitpp')) {
-    function hitung_nilaitpp($tpp_maks, $nilai_kinerja, $jumharikerja)
+    function hitung_nilaitpp($tpp_maks, $nilai_kinerja, $jumharikerja): float|int
     {
         $hasil = 0;
         if (!isset($tpp_maks)) {
@@ -519,7 +505,7 @@ if (!function_exists('hitung_nilaitpp')) {
 }
 
 if (!function_exists('hitung_persen_kinerja')) {
-    function hitung_persen_kinerja($total_satuan, $jum_keg)
+    function hitung_persen_kinerja($total_satuan, $jum_keg): float|int
     {
         $hasil = 0;
         if (!isset($total_satuan)) {
@@ -538,7 +524,7 @@ if (!function_exists('hitung_persen_kinerja')) {
 }
 
 if (!function_exists('hitung_satuan_tugas')) {
-    function hitung_satuan_tugas($bobot, $capaian)
+    function hitung_satuan_tugas($bobot, $capaian): float|int
     {
         $hasil = 0;
         $persen = 100;
@@ -563,14 +549,14 @@ if (!function_exists('hitung_satuan_tugas')) {
 }
 
 if (!function_exists('hitung_tpp_disiplin')) {
-    function hitung_tpp_disiplin($tppmaks)
+    function hitung_tpp_disiplin($tppmaks): float|int
     {
         $hasil = 0;
         if (!isset($tppmaks)) {
             return 0;
         }
 
-        if (isset($tppmaks) && $tppmaks > 0) {
+        if ($tppmaks > 0) {
             $hasil = round(((float) $tppmaks * (settings()->get('ekn_tppmaks_disiplin') / 100)) / settings()->get('ekn_hari_kerja'), 2);
         }
         return $hasil;
@@ -578,7 +564,7 @@ if (!function_exists('hitung_tpp_disiplin')) {
 }
 
 if (!function_exists('hitung_tpp_apel')) {
-    function hitung_tpp_apel($tppdisiplin)
+    function hitung_tpp_apel($tppdisiplin): float|int
     {
         $hasil = 0;
         $persen = 30 / 100;
@@ -586,7 +572,7 @@ if (!function_exists('hitung_tpp_apel')) {
             return 0;
         }
 
-        if (isset($tppdisiplin) && $tppdisiplin !== 0) {
+        if ($tppdisiplin !== 0) {
             $hasil = round($tppdisiplin * $persen, 2);
         }
         return $hasil;
@@ -594,7 +580,7 @@ if (!function_exists('hitung_tpp_apel')) {
 }
 
 if (!function_exists('hitung_tpp_jamkerja')) {
-    function hitung_tpp_jamkerja($tppdisiplin)
+    function hitung_tpp_jamkerja($tppdisiplin): float|int
     {
         $hasil = 0;
         $persen = 70 / 100;
@@ -602,7 +588,7 @@ if (!function_exists('hitung_tpp_jamkerja')) {
             return 0;
         }
 
-        if (isset($tppdisiplin) && $tppdisiplin !== 0) {
+        if ($tppdisiplin !== 0) {
             $hasil = round($tppdisiplin * $persen, 2);
         }
         return $hasil;
@@ -610,7 +596,7 @@ if (!function_exists('hitung_tpp_jamkerja')) {
 }
 
 if (!function_exists('hitung_nilai_apel')) {
-    function hitung_nilai_apel($tppapel)
+    function hitung_nilai_apel($tppapel): float|int
     {
         $hasil = 0;
         if (!isset($tppapel)) {
@@ -625,7 +611,7 @@ if (!function_exists('hitung_nilai_apel')) {
 }
 
 if (!function_exists('hitung_nilai_jamker')) {
-    function hitung_nilai_jamker($tppjamker, $persentase)
+    function hitung_nilai_jamker($tppjamker, $persentase): float|int
     {
         $hasil = 0;
         $persentase = (float) $persentase ?: 0;
@@ -641,7 +627,7 @@ if (!function_exists('hitung_nilai_jamker')) {
 }
 
 if (!function_exists('hitung_nilai_disiplin')) {
-    function hitung_nilai_disiplin($tppapel, $tppjamker, $persentase)
+    function hitung_nilai_disiplin($tppapel, $tppjamker, $persentase): float|int
     {
         $apel = hitung_nilai_apel($tppapel);
         $jamker = hitung_nilai_jamker($tppjamker, $persentase);
@@ -651,7 +637,7 @@ if (!function_exists('hitung_nilai_disiplin')) {
 }
 
 if (!function_exists('nama_hari')) {
-    function nama_hari($tanggal = '')
+    function nama_hari($tanggal = ''): string
     {
         if ($tanggal === '') {
             $tanggal = date('Y-m-d H:i:s');
@@ -667,7 +653,7 @@ if (!function_exists('nama_hari')) {
 }
 
 if (!function_exists('list_bulan')) {
-    function list_bulan($short = false)
+    function list_bulan($short = false): array
     {
         if ($short) {
             $bln = [
@@ -705,7 +691,7 @@ if (!function_exists('list_bulan')) {
 }
 
 if (!function_exists('nama_bulan')) {
-    function nama_bulan($tanggal = '', $short = false)
+    function nama_bulan($tanggal = '', $short = false): string
     {
         if ($tanggal === '' || $tanggal === 'now') {
             $tanggal = date('Y-m-d H:i:s');
@@ -728,7 +714,7 @@ if (!function_exists('nama_bulan')) {
 }
 
 if (!function_exists('index_nama_bulan')) {
-    function index_nama_bulan($nama_bulan = '', $short = false)
+    function index_nama_bulan($nama_bulan = '', $short = false): bool|int|string
     {
         $list_bulan = list_bulan($short);
         return array_search($nama_bulan, $list_bulan, null);
@@ -739,7 +725,7 @@ if (!function_exists('tanggal')) {
     function tanggal($tanggal = 'now', $short_month = false, $empty_val = '')
     {
         $null = ['', '0000-00-00', '0000-00-00 00:00:00', '1970-01-01', null];
-        if (in_array($tanggal, $null)) {
+        if (in_array($tanggal, $null, true)) {
             return $empty_val;
         }
         if ($tanggal === 'now') {
@@ -753,7 +739,7 @@ if (!function_exists('tanggal')) {
 }
 
 if (!function_exists('tanggal_jam')) {
-    function tanggal_jam($tanggal = '', $sep = ' - ')
+    function tanggal_jam($tanggal = '', $sep = ' - '): string
     {
         if ($tanggal === '') {
             $tanggal = date('Y-m-d H:i:s');
@@ -783,7 +769,7 @@ if (!function_exists('localeDate')) {
 }
 
 if (!function_exists('hari_tanggal')) {
-    function hari_tanggal($tanggal = '')
+    function hari_tanggal($tanggal = ''): string
     {
         Date::setLocale('id');
         if ($tanggal === '') {
@@ -800,7 +786,7 @@ if (!function_exists('hari_tanggal')) {
 }
 
 if (!function_exists('hari_tanggal_jam')) {
-    function hari_tanggal_jam($tanggal = '', $sep = ' pukul ')
+    function hari_tanggal_jam($tanggal = '', $sep = ' pukul '): string
     {
         if ($tanggal === '') {
             $tanggal = date('Y-m-d H:i:s');
@@ -810,7 +796,7 @@ if (!function_exists('hari_tanggal_jam')) {
 }
 
 if (!function_exists('selisih_waktu')) {
-    function selisih_waktu($awal, $akhir)
+    function selisih_waktu($awal, $akhir): float
     {
         $awal = isset($awal) ? strtotime($awal) : strtotime(now());
         $akhir = isset($akhir) ? strtotime($akhir) : strtotime(now() + 1);
@@ -826,7 +812,7 @@ if (!function_exists('selisih_waktu')) {
 
 
 if (!function_exists('ddmmy')) {
-    function ddmmy($tanggal = 'now', $sep = '/', $full_year = true)
+    function ddmmy($tanggal = 'now', $sep = '/', $full_year = true): string
     {
         if ($tanggal === null || $tanggal === '0000-00-00') {
             return '';
@@ -840,7 +826,7 @@ if (!function_exists('ddmmy')) {
     }
 }
 
-function dmyhi($tanggal = 'now', $sep = '/', $full_year = true)
+function dmyhi($tanggal = 'now', $sep = '/', $full_year = true): string
 {
     if ($tanggal === null || $tanggal === '0000-00-00') {
         return '';
@@ -854,7 +840,7 @@ function dmyhi($tanggal = 'now', $sep = '/', $full_year = true)
 }
 
 if (!function_exists('ymdhis')) {
-    function ymdhis($tanggal = '', $sep = '/', $inc_time = true)
+    function ymdhis($tanggal = '', $sep = '/', $inc_time = true): string
     {
         if ($tanggal === '') {
             return date('Y-m-d H:i:s');
@@ -894,29 +880,20 @@ if (!function_exists('get_umur')) {
         $x_tahun = "{$obj->y} Tahun";
         $x_bulan = $obj->m > 0 ? " {$obj->m} Bulan" : '';
         $x_hari = $obj->d > 0 ? " {$obj->d} Hari" : '';
-        switch (strtolower($return_type)) {
-            case 'y':
-                return $x_tahun;
-                break;
-            case 'm':
-                return $x_tahun.$x_bulan;
-                break;
-            case 'd':
-                return $x_tahun.$x_bulan.$x_hari;
-                break;
-            case 'obj':
-                return $obj;
-                break;
-            default:
-                return $obj->y;
-        }
+        return match (strtolower($return_type)) {
+            'y' => $x_tahun,
+            'm' => $x_tahun.$x_bulan,
+            'd' => $x_tahun.$x_bulan.$x_hari,
+            'obj' => $obj,
+            default => $obj->y,
+        };
     }
 }
 
 if (!function_exists('xtime')) {
-    function xtime($ymdhis = '')
+    function xtime($ymdhis = ''): string
     {
-        if (!$ymdhis OR $ymdhis === '0000-00-00 00:00:00') {
+        if (!$ymdhis || $ymdhis === '0000-00-00 00:00:00') {
             return '';
         }
         $ago = strtotime($ymdhis);
@@ -930,21 +907,33 @@ if (!function_exists('xtime')) {
         $seljam = abs(round($seldetik / 3600));
         if ($seldetik < 50) {
             return $seldetik.' detik yang lalu';
-        } elseif ($selmenit < 50) {
-            return $selmenit.' menit yang lalu';
-        } elseif ($seljam < 4) {
-            return $seljam.' jam yang lalu';
-        } elseif ($seljam < 24) {
-            return 'Hari ini pukul '.$pukul;
-        } elseif ($seljam < 48) {
-            return 'Kemarin pukul '.$pukul;
-        } elseif (date('W', $ago) === date('W', $now)) {
-            return $nama_hari.' '.$pukul;
-        } elseif (date('Y', $ago) === date('Y', $now)) {
-            return $tgl.' '.$nama_bulan.' '.$pukul;
-        } else {
-            return tanggal_jam($ymdhis);
         }
+
+        if ($selmenit < 50) {
+            return $selmenit.' menit yang lalu';
+        }
+
+        if ($seljam < 4) {
+            return $seljam.' jam yang lalu';
+        }
+
+        if ($seljam < 24) {
+            return 'Hari ini pukul '.$pukul;
+        }
+
+        if ($seljam < 48) {
+            return 'Kemarin pukul '.$pukul;
+        }
+
+        if (date('W', $ago) === date('W', $now)) {
+            return $nama_hari.' '.$pukul;
+        }
+
+        if (date('Y', $ago) === date('Y', $now)) {
+            return $tgl.' '.$nama_bulan.' '.$pukul;
+        }
+
+        return tanggal_jam($ymdhis);
     }
 }
 
@@ -968,13 +957,13 @@ if (!function_exists('is_php')) {
     }
 }
 
-function date_range($unix_start = '', $mixed = '', $is_unix = true, $format = 'Y-m-d')
+function date_range($unix_start = '', $mixed = '', $is_unix = true, $format = 'Y-m-d'): bool|array
 {
-    if ($unix_start === '' OR $mixed === '' OR $format === '') {
+    if ($unix_start === '' || $mixed === '' || $format === '') {
         return false;
     }
 
-    $is_unix = !(!$is_unix OR $is_unix === 'days');
+    $is_unix = !(!$is_unix || $is_unix === 'days');
 
     if ((!ctype_digit((string) $unix_start) && ($unix_start = @strtotime($unix_start)) === false)
         || (!ctype_digit((string) $mixed) && ($is_unix === false || ($mixed = @strtotime($mixed)) === false))
@@ -982,7 +971,7 @@ function date_range($unix_start = '', $mixed = '', $is_unix = true, $format = 'Y
         return false;
     }
 
-    if ($is_unix && ($unix_start === $mixed OR date($format, $unix_start) === date($format, $mixed))) {
+    if ($is_unix && ($unix_start === $mixed || date($format, $unix_start) === date($format, $mixed))) {
         return [date($format, $unix_start)];
     }
 
@@ -1040,7 +1029,7 @@ function date_range($unix_start = '', $mixed = '', $is_unix = true, $format = 'Y
 }
 
 if (!function_exists('list_tanggal')) {
-    function list_tanggal()
+    function list_tanggal(): array
     {
         $day = [];
         for ($i = 1; $i <= 31; $i++) {
@@ -1051,7 +1040,7 @@ if (!function_exists('list_tanggal')) {
 }
 
 if (!function_exists('list_tipe_rumpun')) {
-    function list_tipe_rumpun($char_only = true, $first_empty = false)
+    function list_tipe_rumpun($char_only = true, $first_empty = false): array
     {
         $arr = ['A' => 'A', 'B' => 'B'];
         if (!$char_only) {
@@ -1615,7 +1604,7 @@ if(!function_exists('label_ya_tidak')){
 }
 
 if(!function_exists('list_sudah_belum')){
-    function list_sudah_belum($first_empty = false)
+    function list_sudah_belum($first_empty = false): array
     {
         $arr = array('Y' => 'Sudah', 'N' => 'Belum');
         return ($first_empty === false) ? $arr : array('' => $first_empty) + $arr;
@@ -1631,7 +1620,7 @@ if(!function_exists('label_sudah_belum')){
 }
 
 if(!function_exists('arr_jam')){
-    function arr_jam()
+    function arr_jam(): array
     {
         $arr = array();
         for ($i = 0; $i <= 23; $i++) {
@@ -1644,7 +1633,7 @@ if(!function_exists('arr_jam')){
 }
 
 if(!function_exists('arr_range')){
-    function arr_range($low, $max, $first_empty = FALSE, $step = 1)
+    function arr_range($low, $max, $first_empty = FALSE, $step = 1): array
     {
         $arr = array();
         for ($i = $low; $i <= $max; $i += $step) {
@@ -1655,7 +1644,7 @@ if(!function_exists('arr_range')){
 }
 
 if(!function_exists('in_array_set_checked')){
-    function in_array_set_checked($arr, $val)
+    function in_array_set_checked($arr, $val): string
     {
         if ($arr === 'all') {
             return ' checked';
@@ -1672,7 +1661,7 @@ if(!function_exists('in_array_set_checked')){
 }
 
 if(!function_exists('download_pegmesin')){
-    function download_pegmesin($idmsn)
+    function download_pegmesin($idmsn): void
     {
         $ret = array('ok' => FALSE, 'msg' => '', 'id' => 0);
         if (!konektor_aktif()) {
@@ -1693,7 +1682,7 @@ if(!function_exists('list_mesin')){
 }
 
 if(!function_exists('import_log_finger')){
-    function import_log_finger($id_msn, $tgl_absen)
+    function import_log_finger($id_msn, $tgl_absen): bool|int
     {
         $tgl_absen = $tgl_absen ?? date_ymd();
         $jum_data = 0;
@@ -1812,13 +1801,15 @@ if(!function_exists('import_log_finger')){
  * DATE HELPER
  */
 if(!function_exists('is_empty_date')){
-    function is_empty_date($datetime) {
+    function is_empty_date($datetime): bool
+    {
         return empty($datetime) || ($datetime === '0000-00-00') || ($datetime === '0000-00-00 00:00:00');
     }
 }
 
 if(!function_exists('days_between')){
-    function days_between($ymd1, $ymd2 = NULL) {
+    function days_between($ymd1, $ymd2 = NULL): float
+    {
         if ( ! $ymd2) {
             $ymd2 = date_ymd();
         }
@@ -1828,7 +1819,8 @@ if(!function_exists('days_between')){
 }
 
 if(!function_exists('minutes_between')){
-    function minutes_between($datetime1, $datetime2) {
+    function minutes_between($datetime1, $datetime2): float
+    {
         $datetime1 = strtotime($datetime1);
         $datetime2 = strtotime($datetime2);
         $interval  = abs($datetime2 - $datetime1);
@@ -1879,12 +1871,12 @@ if(!function_exists('day_name')){
                 return __($lang_prefix . $date);
             }
             // in Y-m-d format
-            if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}/', $date, $match)) {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}/', $date, $match)) {
                 $date = date('w', strtotime($match[0]));
                 return __($lang_prefix . $date);
             }
             // in d/m/Y or d-m-Y format
-            if (preg_match('/^[0-9]{2}([\-|\/]{1})[0-9]{2}[\-|\/]{1}[0-9]{4}/', $date, $match)) {
+            if (preg_match('/^\d{2}([\-|\/]{1})\d{2}[\-|\/]{1}\d{4}/', $date, $match)) {
                 $date = date('w', strtotime(dmy2ymd($match[0], $match[1])));
                 return __($lang_prefix . $date);
             }
@@ -1973,7 +1965,7 @@ if ( ! function_exists('now'))
      */
     function now($timezone = null)
     {
-        if (empty($timezone) || null === $timezone)
+        if (empty($timezone))
         {
             $timezone = config('app.timezone');
         }
@@ -1992,13 +1984,13 @@ if ( ! function_exists('now'))
 }
 
 if(!function_exists('mdate')){
-    function mdate($datestr = '', $time = '')
+    function mdate($datestr = '', $time = ''): string
     {
         if ($datestr === '') {
             return '';
         }
 
-        if (empty($time) || $time === '') {
+        if (empty($time)) {
             $time = now();
         }
         $datestr = str_replace('%\\','',preg_replace('/([a-z]+?){1}/i', '\\\\\\1', $datestr));
@@ -2009,7 +2001,8 @@ if(!function_exists('mdate')){
 }
 
 if(!function_exists('month_index')){
-    function month_index($month_name, $short = FALSE) {
+    function month_index($month_name, $short = FALSE): bool|int|string
+    {
         $month_list = month_list($short);
         return array_search($month_name, $month_list,true);
     }
@@ -2075,7 +2068,7 @@ if(!function_exists('date_his')){
 
 if(!function_exists('dmy2ymd')){
     function dmy2ymd($dmy, $default = NULL) {
-        if (preg_match('/^([0-9]{2})[\/\-\.]{1}([0-9]{2})[\/\-\.]{1}([0-9]{2,4})$/', $dmy, $match)) {
+        if (preg_match('/^(\d{2})[\/\-\.]{1}(\d{2})[\/\-\.]{1}(\d{2,4})$/', $dmy, $match)) {
             return $match[3] . '-' . $match[2] . '-' . $match[1];
         }
         return $default;
@@ -2091,7 +2084,7 @@ if(!function_exists('format_date')){
             $date_int = now();
         } elseif (is_int($date)) {
             $date_int = $date;
-        }elseif (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4})([0-9\ \:]*)/', $date, $match)) {
+        }elseif (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})([0-9:]*)/', $date, $match)) {
             $date_int = strtotime( $match[3] . '-' . $match[2] . '-' . $match[1] . (isset($match[4]) ? ' '.$match[4] : '') );
         } elseif ( ! $date_int = strtotime($date)) {
             return $default;
@@ -2109,11 +2102,12 @@ if(!function_exists('format_date')){
 }
 
 if(!function_exists('year_range')){
-    function year_range($start='', $end='') {
+    function year_range($start='', $end=''): array
+    {
         if (strlen($start) < 4) {
-            if (substr($start, 0, 1) === '+') {
-                $year1 = date("Y") + substr($start, 1, strlen($start));
-            } elseif (substr($start, 0, 1) === '-') {
+            if ($start[0] === '+') {
+                $year1 = date("Y").substr($start, 1, strlen($start));
+            } elseif ($start[0] === '-') {
                 $year1 = date("Y") - substr($start, 1, strlen($start));
             } elseif ($start === '0') {
                 $year1 = date("Y");
@@ -2123,9 +2117,9 @@ if(!function_exists('year_range')){
         }
 
         if (strlen($end) < 4) {
-            if (substr($end, 0, 1) === '+') {
-                $year2 = date("Y") + substr($end, 1, strlen($end));
-            } elseif (substr($end, 0, 1) === '-') {
+            if ($end[0] === '+') {
+                $year2 = date("Y").substr($end, 1, strlen($end));
+            } elseif ($end[0] === '-') {
                 $year2 = date("Y") - substr($end, 1, strlen($end));
             } elseif ($end === '0') {
                 $year2 = date("Y");
@@ -2139,7 +2133,8 @@ if(!function_exists('year_range')){
 }
 
 if(!function_exists('header_no_cache')){
-    function header_no_cache() {
+    function header_no_cache(): void
+    {
         header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -2147,8 +2142,3 @@ if(!function_exists('header_no_cache')){
         header("Pragma: no-cache");
     }
 }
-
-
-
-
-

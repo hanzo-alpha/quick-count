@@ -31,7 +31,9 @@ class HomeController extends Controller
         $suara2 = 0;
         $namaCalon1 = 'Suara Pasangan Calon';
         $namaCalon2 = 'Suara Kolom Kosong';
-        $hitung = HitungCepat::select(['nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
+        $hitung = HitungCepat::select(
+            ['nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah']
+        )->get();
 
         foreach ($hitung as $item) {
             $suara1 += $item->suara1;
@@ -102,7 +104,7 @@ class HomeController extends Controller
             'namaCalon2' => 'Suara Kolom Kosong',
             'namaTidakSah' => 'Suara Tidak Sah',
         ];
-        $hitung = HitungCepat::select(['kabupaten','nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
+        $hitung = HitungCepat::select(['kabupaten', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
 
         return $hitung->groupBy('kabupaten')->reduce(function ($columnChartModel, $data) use ($colors, $namaCalon) {
             $totalSuara1 = $data->sum('suara1');
@@ -156,7 +158,7 @@ class HomeController extends Controller
 //            $suara2[] = $totalSuara2;
 //        }
 
-        $hitung = HitungCepat::select(['kecamatan','nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->with(['kec'])->get();
+        $hitung = HitungCepat::select(['kecamatan', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->with(['kec'])->get();
 
         return $hitung->groupBy('kecamatan')->reduce(function ($columnChartModel, $data) use ($colors, $namaCalon, $hitung) {
             $label = [];
@@ -178,7 +180,7 @@ class HomeController extends Controller
 //                $columnChartModel->addColumn($item->kec->name, $totalSuara2, $colors['suara1']);
 //                $columnChartModel->addSeriesColumn($item->kec->name,$item->kec->name, $totalSuara1, $colors['suara1']);
             }
-            $columnChartModel->addColumn($label, $suara1, $colors['suara2']);
+            $columnChartModel->addColumn($label, $suara1, $colors['suara1']);
 //            $columnChartModel->addColumn($label, $suara1, $colors['suara1']);
 //            $columnChartModel->addColumn($label, $suara2, $colors['suara2']);
 
@@ -222,6 +224,13 @@ class HomeController extends Controller
         $kecChart = $this->rekapKecamatanChart();
 
 
-        return view('pages.dashboard', compact('suaraPerKecamatan','pageConfigs','breadcrumbs' , 'columnChartModel','rekapColumnChartModel' ,'kecChart'));
+        return view('pages.dashboard', compact(
+            'suaraPerKecamatan',
+            'pageConfigs',
+            'breadcrumbs',
+            'columnChartModel',
+            'rekapColumnChartModel',
+            'kecChart'
+        ));
     }
 }

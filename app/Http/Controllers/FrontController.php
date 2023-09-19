@@ -7,6 +7,9 @@ use App\Models\HitungCepat;
 use App\Models\Kecamatan;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\ColumnChartModel;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use JetBrains\PhpStorm\ArrayShape;
 
 class FrontController extends Controller
@@ -42,7 +45,7 @@ class FrontController extends Controller
         ];
     }
 
-    public function rekapKecamatanChart()
+    public function rekapKecamatanChart(): RekapKecamatanChart
     {
         $label = [];
         $suara1 = [];
@@ -74,30 +77,24 @@ class FrontController extends Controller
         ]);
 
         return $kecChart;
-
-//        return [
-//            'labels' => $label,
-//            'suara1' => $suara1,
-//            'suara2' => $suara2,
-//        ];
     }
 
     public function columnChartModel(): ColumnChartModel
     {
-        $colors = [
-            'suara1' => '#f6ad55',
-            'suara2' => '#fc8181',
-            'suaraTdkSah' => '#90cdf4',
-        ];
 
-        $namaCalon = [
-            'namaCalon1' => 'Suara Pasangan Calon',
-            'namaCalon2' => 'Suara Kolom Kosong',
-            'namaTidakSah' => 'Suara Tidak Sah',
-        ];
         $hitung = HitungCepat::select(['kabupaten', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->get();
 
-        return $hitung->groupBy('kabupaten')->reduce(function ($columnChartModel, $data) use ($colors, $namaCalon) {
+        return $hitung->groupBy('kabupaten')->reduce(function ($columnChartModel, $data) {
+            $namaCalon = [
+                'namaCalon1' => 'Suara Pasangan Calon',
+                'namaCalon2' => 'Suara Kolom Kosong',
+                'namaTidakSah' => 'Suara Tidak Sah',
+            ];
+            $colors = [
+                'suara1' => '#f6ad55',
+                'suara2' => '#fc8181',
+                'suaraTdkSah' => '#90cdf4',
+            ];
             $totalSuara1 = $data->sum('suara1');
             $totalSuara2 = $data->sum('suara2');
             $totalSuaraTidakSah = $data->sum('suara_tidak_sah');
@@ -123,18 +120,8 @@ class FrontController extends Controller
 
     public function rekapColumnChartModel(): ColumnChartModel
     {
-        $colors = [
-            'suara1' => '#f6ad55',
-            'suara2' => '#fc8181',
-            'suaraTdkSah' => '#90cdf4',
-        ];
 
-        $namaCalon = [
-            'namaCalon1' => 'Suara Pasangan Calon',
-            'namaCalon2' => 'Suara Kolom Kosong',
-            'namaTidakSah' => 'Suara Tidak Sah',
-        ];
-//        $label = [];
+        //        $label = [];
 //        $suara1 = [];
 //        $suara2 = [];
 //
@@ -151,7 +138,17 @@ class FrontController extends Controller
 
         $hitung = HitungCepat::select(['kecamatan', 'nama_calon1', 'nama_calon2', 'suara1', 'suara2', 'suara_tidak_sah'])->with(['kec'])->get();
 
-        return $hitung->groupBy('kecamatan')->reduce(function ($columnChartModel, $data) use ($colors, $namaCalon, $hitung) {
+        return $hitung->groupBy('kecamatan')->reduce(function ($columnChartModel, $data) {
+            $namaCalon = [
+                'namaCalon1' => 'Suara Pasangan Calon',
+                'namaCalon2' => 'Suara Kolom Kosong',
+                'namaTidakSah' => 'Suara Tidak Sah',
+            ];
+            $colors = [
+                'suara1' => '#f6ad55',
+                'suara2' => '#fc8181',
+                'suaraTdkSah' => '#90cdf4',
+            ];
             $label = [];
             $suara1 = [];
             $suara2 = [];
@@ -198,7 +195,7 @@ class FrontController extends Controller
         );
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
         //Pageheader set true for breadcrumbs
         $pageConfigs = [

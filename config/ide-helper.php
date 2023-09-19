@@ -11,8 +11,8 @@ return array(
     |
     */
 
-    'filename'  => '_ide_helper',
-    'format'    => 'php',
+    'filename' => '_ide_helper',
+    'format' => 'php',
 
     'meta_filename' => '.phpstorm.meta.php',
 
@@ -107,9 +107,7 @@ return array(
     |
     */
 
-    'ignored_models' => array(
-
-    ),
+    'ignored_models' => array(),
 
     /*
     |--------------------------------------------------------------------------
@@ -137,9 +135,7 @@ return array(
     |
     */
 
-    'interfaces' => array(
-
-    ),
+    'interfaces' => array(),
 
     /*
     |--------------------------------------------------------------------------
@@ -167,9 +163,7 @@ return array(
     |  ),
     |
     */
-    'custom_db_types' => array(
-
-    ),
+    'custom_db_types' => array(),
 
     /*
      |--------------------------------------------------------------------------

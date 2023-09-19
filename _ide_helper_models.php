@@ -32,6 +32,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Calon whereNamaCalon2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Calon whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Calon whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperCalon {}
 }
@@ -41,7 +42,8 @@ namespace App\Models{
  * App\Models\HitungCepat
  *
  * @property int $id
- * @property \App\Models\Kecamatan|null $kecamatan
+ * @property \App\Models\Kota|null $kabupaten
+ * @property string|null $kecamatan
  * @property \App\Models\Kelurahan|null $desa
  * @property int $calon1_id
  * @property int $calon2_id
@@ -51,10 +53,11 @@ namespace App\Models{
  * @property int $suara2
  * @property int $suara_tidak_sah
  * @property int $no_tps
- * @property int|null $status
+ * @property bool $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Calon|null $calon
+ * @property-read \App\Models\Kecamatan|null $kec
  * @property-read \App\Models\Tps|null $tps
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat newQuery()
@@ -67,6 +70,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereDesa($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereKabupaten($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereKecamatan($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereNamaCalon1($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereNamaCalon2($value)
@@ -76,6 +80,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereSuara2($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereSuaraTidakSah($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungCepat whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperHitungCepat {}
 }
@@ -93,6 +98,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|HitungSuaraCalon status($status)
  * @method static \Illuminate\Database\Eloquent\Builder|HitungSuaraCalon tpsBlmMasuk()
  * @method static \Illuminate\Database\Eloquent\Builder|HitungSuaraCalon tpsMasuk()
+ * @mixin \Eloquent
  */
 	class IdeHelperHitungSuaraCalon {}
 }
@@ -111,9 +117,9 @@ namespace App\Models{
  * @property-read \Laravolt\Indonesia\Models\City $city
  * @property-read mixed $city_name
  * @property-read mixed $province_name
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\HitungCepat[] $hitung
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\HitungCepat> $hitung
  * @property-read int|null $hitung_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravolt\Indonesia\Models\Village[] $villages
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravolt\Indonesia\Models\Village> $villages
  * @property-read int|null $villages_count
  * @method static \Illuminate\Database\Eloquent\Builder|Kecamatan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Kecamatan newQuery()
@@ -126,6 +132,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kecamatan whereMeta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kecamatan whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kecamatan whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperKecamatan {}
 }
@@ -156,6 +163,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereMeta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kelurahan whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperKelurahan {}
 }
@@ -171,12 +179,12 @@ namespace App\Models{
  * @property array|null $meta
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravolt\Indonesia\Models\District[] $districts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravolt\Indonesia\Models\District> $districts
  * @property-read int|null $districts_count
  * @property-read mixed $logo_path
  * @property-read mixed $province_name
  * @property-read \Laravolt\Indonesia\Models\Province $province
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravolt\Indonesia\Models\Village[] $villages
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravolt\Indonesia\Models\Village> $villages
  * @property-read int|null $villages_count
  * @method static \Illuminate\Database\Eloquent\Builder|Kota newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Kota newQuery()
@@ -189,6 +197,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kota whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kota whereProvinceCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kota whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperKota {}
 }
@@ -200,6 +209,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Mesin newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Mesin newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Mesin query()
+ * @mixin \Eloquent
  */
 	class IdeHelperMesin {}
 }
@@ -211,6 +221,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Pengaturan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Pengaturan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Pengaturan query()
+ * @mixin \Eloquent
  */
 	class IdeHelperPengaturan {}
 }
@@ -225,9 +236,9 @@ namespace App\Models{
  * @property array|null $meta
  * @property string|null $created_at
  * @property string|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravolt\Indonesia\Models\City[] $cities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravolt\Indonesia\Models\City> $cities
  * @property-read int|null $cities_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravolt\Indonesia\Models\District[] $districts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravolt\Indonesia\Models\District> $districts
  * @property-read int|null $districts_count
  * @property-read mixed $logo_path
  * @method static \Illuminate\Database\Eloquent\Builder|Provinsi newModelQuery()
@@ -240,6 +251,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Provinsi whereMeta($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Provinsi whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Provinsi whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperProvinsi {}
 }
@@ -256,6 +268,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|RefJenisCalon query()
  * @method static \Illuminate\Database\Eloquent\Builder|RefJenisCalon whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|RefJenisCalon whereJenisCalon($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperRefJenisCalon {}
 }
@@ -290,6 +303,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SuaraCalon whereTpsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SuaraCalon whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SuaraCalon whereUserId($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperSuaraCalon {}
 }
@@ -330,6 +344,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Tps whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tps whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tps whereUserId($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperTps {}
 }
@@ -353,12 +368,12 @@ namespace App\Models{
  * @property-read \Laravolt\Indonesia\Models\Kabupaten|null $kabupaten
  * @property-read \Laravolt\Indonesia\Models\Kecamatan|null $kecamatan
  * @property-read \Laravolt\Indonesia\Models\Kelurahan|null $kelurahan
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Laravolt\Indonesia\Models\Provinsi|null $provinsi
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -377,6 +392,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @mixin \Eloquent
  */
 	class IdeHelperUser {}
 }

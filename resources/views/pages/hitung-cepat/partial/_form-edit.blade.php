@@ -8,8 +8,7 @@
           <label for="select-kecamatan-edit">Kecamatan</label>
           <div class="position-relative">
             <div class="form-group">
-              {!! Form::select('kecamatan',$kecamatan,$model->kecamatan,['class' => 'form-control selecKecEdit select2','id' =>
-              'select-kecamatan-edit']) !!}
+              {!! Form::select('kecamatan',$kecamatan, $model->kecamatan,['class' => 'form-control selecKecEdit select2','id' => 'select-kecamatan-edit']) !!}
             </div>
           </div>
         </div>
@@ -19,7 +18,7 @@
           <label for="select-desa-edit">Kelurahan</label>
           <div class="position-relative">
             <div class="form-group">
-              {!! Form::select('desa',$desa,$model->desa,['class' => 'form-control selectDesaEdit select2','id' => 'select-desa-edit']) !!}
+              {!! Form::select('desa',$desa, $model->desa,['class' => 'form-control selectDesaEdit select2','id' => 'select-desa-edit']) !!}
             </div>
           </div>
         </div>

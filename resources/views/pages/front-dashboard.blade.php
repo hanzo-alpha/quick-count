@@ -8,7 +8,7 @@
 
 @endsection
 @section('page-styles')
-{{--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">--}}
+    {{--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">--}}
     <style>
         .card-body {
             padding: 1.5rem;
@@ -87,8 +87,9 @@
                     </div>
                     <div class="card-content">
                         <div class="card-body pb-1">
-{{--                            <div id="chart" style="height: 600px"></div>--}}
+                            {{--                            <div id="chart" style="height: 600px"></div>--}}
                             <div style="height: 50.5rem;">
+{{--                                @livewire('livewire-column-chart', ['column-chart-model'=>$columnChartModel,'key' => $columnChartModel->reactiveKey()])--}}
                                 <livewire:livewire-column-chart
                                     key="{{ $columnChartModel->reactiveKey() }}"
                                     :column-chart-model="$columnChartModel"

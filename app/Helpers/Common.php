@@ -5,7 +5,8 @@ use Akaunting\Setting;
      * @return void
      */
     if ( !function_exists('set_config') ) {
-        function set_config() {
+        function set_config(): void
+        {
             $args = func_get_args();
             $jum = func_num_args();
 
@@ -30,7 +31,8 @@ use Akaunting\Setting;
         }
     }
 
-    function cfg_e($item) {
+    function cfg_e($item): void
+    {
         echo config_item($item);
     }
 
@@ -56,8 +58,9 @@ use Akaunting\Setting;
         return $inc_dbprefix ? db_prefix($alias) : $alias;
     }
 
-    function app_method_exists($object, $method) {
-        if (substr($method, 0, 1) === '_') {
+    function app_method_exists($object, $method): bool
+    {
+        if (str_starts_with($method, '_')) {
             return false;
         }
         return method_exists($object, $method);
@@ -137,13 +140,13 @@ use Akaunting\Setting;
         function flang($item='') {
             $ci = &get_instance();
             $format = $ci->lang->line($item);
-            if (func_num_args() <= 1)
+            if (func_num_args() <= 1) {
                 return $format;
-            else {
-                $args = func_get_args();
-                $args[0] = $format;
-                return call_user_func_array('sprintf', $args);
             }
+
+            $args = func_get_args();
+            $args[0] = $format;
+            return sprintf(...$args);
         }
     }
 
@@ -183,7 +186,7 @@ use Akaunting\Setting;
      */
     if (!function_exists('md5encrypt'))
     {
-        function md5encrypt($str='')
+        function md5encrypt($str=''): string
         {
 //            $CI = &get_instance();
 //            $CI->load->library('encrypt');
@@ -197,7 +200,8 @@ use Akaunting\Setting;
      * @return string
      */
 
-    function add_prefix($str='') {
+    function add_prefix($str=''): string
+    {
         return env('APP_GLOBAL_PREFIX').$str;
     }
 
@@ -207,9 +211,9 @@ use Akaunting\Setting;
      */
     if ( !function_exists('db_prefix') )
     {
-        function db_prefix($tbname = '') {
-            $CI = DB::setTablePrefix($tbname);
-            return $CI->getTablePrefix();
+        function db_prefix($tbname = ''): string
+        {
+            return DB::setTablePrefix($tbname)->getTablePrefix();
         }
     }
 
@@ -218,23 +222,29 @@ use Akaunting\Setting;
      * @param string/array $params
      */
     if ( !function_exists('build_html_attr') ) {
-        function build_html_attr($params = NULL) {
-            if ($params == NULL) return '';
+        function build_html_attr($params = NULL): string
+        {
+            if ($params === NULL) {
+                return '';
+            }
             if ( !is_array($params) ) {
                 parse_str($params, $params);
             }
             $attr_arr = array();
             foreach ($params as $key => $val) {
-                if ($val == NULL && $key != 'value')
-                    $attr_arr[] = $key; else
+                if ($val === NULL && $key !== 'value') {
+                    $attr_arr[] = $key;
+                } else {
                     $attr_arr[] = "{$key}=\"{$val}\"";
+                }
             }
             return implode(' ', $attr_arr);
         }
     }
 
     if ( !function_exists('load_library') ) {
-        function load_library($items = NULL) {
+        function load_library($items = NULL): void
+        {
             $ci = &get_instance();
             if (!is_array($items)) {
                 $items = str_replace(' ', '', $items);
@@ -245,7 +255,8 @@ use Akaunting\Setting;
     }
 
     if ( !function_exists('load_model') ) {
-        function load_model($items = NULL) {
+        function load_model($items = NULL): void
+        {
             $ci = &get_instance();
             if (!is_array($items)) {
                 $items = str_replace(' ', '', $items);
@@ -255,13 +266,15 @@ use Akaunting\Setting;
         }
     }
 
-    function load_helper($items = NULL) {
+    function load_helper($items = NULL): void
+    {
         $CI =& get_instance();
         $CI->load->helper($items);
     }
 
     if ( !function_exists('load_file') ) {
-        function load_file($file = NULL, $return = FALSE) {
+        function load_file($file = NULL, $return = FALSE): void
+        {
             $ci = &get_instance();
             $ci->load->file($file, $return);
         }
@@ -274,7 +287,7 @@ use Akaunting\Setting;
         }
     }
 
-    function get_where_value($table = '', $field ='', $where, $default = FALSE) {
+    function get_where_value($where, $table = '', $field ='', $default = FALSE) {
         $ci = DB::table($table);
 
         $qw = $ci->select( "{$field} AS val")->where($where);
@@ -307,10 +320,15 @@ use Akaunting\Setting;
         return $ci->user->is_logged_in();
     }
 
-    function is_user_uri($uri = NULL) {
+    function is_user_uri($uri = NULL): bool
+    {
         $user_uri = config_item('user_uri');
-        if (empty($user_uri)) return FALSE;
-        if ($uri === NULL) $uri = &get_instance()->uri->segment(1, 'index');
+        if (empty($user_uri)) {
+            return false;
+        }
+        if ($uri === NULL) {
+            $uri = &get_instance()->uri->segment(1, 'index');
+        }
         return ($uri === $user_uri);
     }
 
@@ -338,7 +356,8 @@ use Akaunting\Setting;
         return ($item === NULL) ? $data : $data[$item];
     }
 
-    function current_user_can($capablities) {
+    function current_user_can($capablities): bool
+    {
         $ci =& get_instance();
         $udata = $ci->user->get_logged_in_data();
         is_array($capablities) OR $capablities = array($capablities);
@@ -365,29 +384,42 @@ use Akaunting\Setting;
             }
             return TRUE;
         }
-        if ( ! is_array($level_incap)) $level_incap = array();
+        if ( ! is_array($level_incap)) {
+            $level_incap = array();
+        }
         foreach($capablities as $cap) {
-            if (in_array($cap, $level_cap) && ! in_array($cap, $level_incap)) return TRUE;
+            if (in_array($cap, $level_cap, true) && !in_array($cap, $level_incap, true)) {
+                return true;
+            }
             $exp = explode('_', $cap, 2);
-            if (in_array($exp[0].'_*', $level_cap) && ! in_array($exp[0].'_*', $level_incap)) return TRUE;
+            if (in_array($exp[0].'_*', $level_cap, true) && !in_array($exp[0].'_*', $level_incap, true)) {
+                return true;
+            }
         }
         return FALSE;
     }
 
-    /** @param string $item name|label|name-label */
-    function get_user_levels($item = 'name-label', $exclude = array()) {
+    /** @param  string  $item name|label|name-label */
+    function get_user_levels(string $item = 'name-label', $exclude = array()): ?array
+    {
         static $levels = NULL;
         if ($levels === NULL) {
             $ci =& get_instance();
             $levels = array();
             foreach ($ci->user->user_levels as $level => $data) {
-                if (in_array($level, $exclude)) continue;
+                if (in_array($level, $exclude, true)) continue;
                 $levels[$level] = $data['label'];
             }
         }
-        if ($item === 'name') return array_keys($levels);
-        elseif ($item === 'label') return array_values($levels);
-        else return $levels;
+        if ($item === 'name') {
+            return array_keys($levels);
+        }
+
+        if ($item === 'label') {
+            return array_values($levels);
+        }
+
+        return $levels;
     }
 
     function user_level_dropdown($selected = '', $extra = '', $exclude = array()) {
@@ -396,7 +428,8 @@ use Akaunting\Setting;
         return form_dropdown('level', get_user_levels('name-label', $exclude), $selected, $extra);
     }
 
-    function restrict_by_cap($capablities) {
+    function restrict_by_cap($capablities): bool
+    {
         if ( ! current_user_can($capablities)) {
             set_config('__page_restricted__', 'true');
             return FALSE;
@@ -404,11 +437,13 @@ use Akaunting\Setting;
         return TRUE;
     }
 
-    function set_restricted() {
+    function set_restricted(): null
+    {
         return set_config('__page_restricted__', 'true');
     }
 
-    function page_is_restricted() {
+    function page_is_restricted(): bool
+    {
         return config_item('__page_restricted__') === 'true';
     }
 
@@ -420,7 +455,7 @@ use Akaunting\Setting;
          * @param	string
          * @return	mixed
          */
-        function config_item($item)
+        function config_item($item): mixed
         {
             static $_config;
 

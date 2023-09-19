@@ -10,7 +10,7 @@ return [
     | Auto-save every time the application shuts down
     |
     */
-    'auto_save'         => true,
+    'auto_save'         => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -22,8 +22,8 @@ return [
     |
     */
     'cache' => [
-        'enabled'       => true,
-        'key'           => 'config',
+        'enabled'       => false,
+        'key'           => 'setting',
         'ttl'           => 3600,
         'auto_clear'    => true,
     ],
@@ -51,9 +51,9 @@ return [
     */
     'database' => [
         'connection'    => null,
-        'table'         => 'config',
-        'key'           => 'cfg_key',
-        'value'         => 'cfg_value',
+        'table'         => 'qc_config',
+        'key'           => 'key',
+        'value'         => 'value',
     ],
 
     /*
@@ -85,6 +85,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Fallback
+    |--------------------------------------------------------------------------
+    |
+    | Define fallback settings to be used in case the default is null
+    |
+    | Sample:
+    |   "currency" => "USD",
+    |
+    */
+    'fallback' => [
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Required Extra Columns
     |--------------------------------------------------------------------------
     |
@@ -98,4 +113,20 @@ return [
     'required_extra_columns' => [
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Encryption
+    |--------------------------------------------------------------------------
+    |
+    | Define the keys which should be crypt automatically.
+    |
+    | Sample:
+    |   "payment.key"
+    |
+    */
+   'encrypted_keys' => [
+
+   ],
+
 ];

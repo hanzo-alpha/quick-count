@@ -1,6 +1,6 @@
 <!-- BEGIN: Vendor JS-->
 <script>
-  let assetBaseUrl = "{{ asset('') }}";
+    let assetBaseUrl = "{{ asset('') }}";
 </script>
 <script src="{{asset('vendors/js/vendors.min.js')}}"></script>
 <script src="{{asset('fonts/LivIconsEvo/js/LivIconsEvo.tools.js')}}"></script>
@@ -18,9 +18,9 @@
 
 <!-- BEGIN: Theme JS-->
 @if($configData['mainLayoutType'] === 'vertical-menu')
-  <script src="{{asset('js/scripts/configs/vertical-menu-light.js')}}"></script>
+    <script src="{{asset('js/scripts/configs/vertical-menu-light.js')}}"></script>
 @else
-  <script src="{{asset('js/scripts/configs/horizontal-menu.js')}}"></script>
+    <script src="{{asset('js/scripts/configs/horizontal-menu.js')}}"></script>
 @endif
 <script src="{{asset('js/core/app-menu.js')}}"></script>
 <script src="{{asset('js/core/app.js')}}"></script>
@@ -29,15 +29,20 @@
 <script src="{{asset('js/scripts/footer.js')}}"></script>
 <script src="{{asset('js/scripts/extensions/toastr.js')}}"></script>
 @livewireScripts
+@if( env('APP_ENV') === 'production' )
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+@else
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+@endif
 <script>
-  $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
-  $('#flash-overlay-modal').modal();
+    $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+    $('#flash-overlay-modal').modal();
 
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 </script>
 <!-- END: Theme JS-->
 
@@ -46,15 +51,14 @@
 
 <!-- BEGIN: Custom Scripts -->
 @if(request()->routeIs('data-suara-calon.index'))
-  @include('pages.suara-calon.partial.scripts')
+    @include('pages.suara-calon.partial.scripts')
 @elseif(request()->routeIs('data-tps.index'))
-  @include('pages.tps.partial.scripts')
+    @include('pages.tps.partial.scripts')
 @elseif(request()->routeIs('hitung-cepat.index'))
-  @include('pages.hitung-cepat.partial.scripts')
+    @include('pages.hitung-cepat.partial.scripts')
 @elseif(request()->routeIs('data-calon.index'))
-  @include('pages.calon.partial.scripts')
+    @include('pages.calon.partial.scripts')
 @endif
 <!-- END: Custom Scripts -->
 
 <!-- END: Page JS-->
-

@@ -49,80 +49,66 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-9">
-        <div class="form-group">
-          <label for="calon-add">Nama Pasangan Calon</label>
-          <div class="position-relative">
-            <div class="form-group">
-              {!! Form::hidden('calon1_id',$calon[0]['id']) !!}
-              {!! Form::text('nama_calon1',$calon[0]['id'].'. '.$calon[0]['nama_calon_1'] .' - '. $calon[0]['nama_calon_2'],['class' =>
-              'form-control','id'=>'calon-add','placeholder' => 'Suara','readonly']) !!}
+        @if(count($calon) > 0)
+            <div class="col-md-9">
+                <div class="form-group">
+                <label for="calon-add">Nama Pasangan Calon</label>
+                <div class="position-relative">
+                    <div class="form-group">
+                    {!! Form::hidden('calon1_id',$calon[0]['id']) !!}
+                    {!! Form::text('nama_calon1',$calon[0]['id'].'. '.$calon[0]['nama_calon_1'] .' - '. $calon[0]['nama_calon_2'],['class' =>
+                    'form-control','id'=>'calon-add','placeholder' => 'Suara','readonly']) !!}
+                    </div>
+                </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="form-group">
-          <label for="tps-add">Jumlah Suara</label>
-          <div class="position-relative">
-            <div class="form-group">
-              {!! Form::number('suara1',old('suara1') ?? '',['class' => 'form-control','id' =>'suara'.$calon[0]['id'],'placeholder' =>
-              'Suara']) !!}
-              <div class="form-control-position">
-                <i class="bx bx-calculator"></i>
-              </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                <label for="tps-add">Jumlah Suara</label>
+                <div class="position-relative">
+                    <div class="form-group">
+                    {!! Form::number('suara1',old('suara1') ?? '',['class' => 'form-control','id' =>'suara'.$calon[0]['id'],'placeholder' =>
+                    'Suara']) !!}
+                    <div class="form-control-position">
+                        <i class="bx bx-calculator"></i>
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-9">
-        <div class="form-group">
-          <div class="position-relative">
-            <div class="form-group">
-              {!! Form::hidden('calon2_id',$calon[1]['id']) !!}
-              {!! Form::text('nama_calon2',$calon[1]['id'].'. '.$calon[1]['nama_calon_1'] .' - '. $calon[1]['nama_calon_2'],['class' =>
-              'form-control','id' =>'calon-add', 'placeholder' => 'Suara','readonly']) !!}
+            <div class="col-md-9">
+                <div class="form-group">
+                <div class="position-relative">
+                    <div class="form-group">
+                    {!! Form::hidden('calon2_id',$calon[1]['id']) !!}
+                    {!! Form::text('nama_calon2',$calon[1]['id'].'. '.$calon[1]['nama_calon_1'] .' - '. $calon[1]['nama_calon_2'],['class' =>
+                    'form-control','id' =>'calon-add', 'placeholder' => 'Suara','readonly']) !!}
+                    </div>
+                </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="form-group">
-          <div class="position-relative">
-            <div class="form-group">
-              {!! Form::number('suara2',old('suara2') ?? '',['class' => 'form-control','id' =>'suara'.$calon[1]['id'],'placeholder' =>
-              'Suara']) !!}
-              <div class="form-control-position">
-                <i class="bx bx-calculator"></i>
-              </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                <div class="position-relative">
+                    <div class="form-group">
+                    {!! Form::number('suara2',old('suara2') ?? '',['class' => 'form-control','id' =>'suara'.$calon[1]['id'],'placeholder' =>
+                    'Suara']) !!}
+                    <div class="form-control-position">
+                        <i class="bx bx-calculator"></i>
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
-          </div>
+      @else
+        <div class="col-md-12">
+            <div class="form-group">
+            <div class="position-relative">
+                <span class="text-danger">Data Calon tidak ditemukan. Harap Input Data Calon Terlebih Dahulu.</span>
+            </div>
+            </div>
         </div>
-      </div>
-      {{--      <div class="col-md-9">--}}
-      {{--        <div class="form-group">--}}
-      {{--          <div class="position-relative">--}}
-      {{--            <div class="form-group">--}}
-      {{--              {!! Form::hidden('calon3_id',$calon[2]['id']) !!}--}}
-      {{--              {!! Form::text('nama_calon3',$calon[2]['id'].'. '.$calon[2]['nama_calon_1'] .' - '. $calon[2]['nama_calon_2'],['class' =>--}}
-      {{--              'form-control','id' =>'calon-add', 'placeholder' => 'Suara','readonly']) !!}--}}
-      {{--            </div>--}}
-      {{--          </div>--}}
-      {{--        </div>--}}
-      {{--      </div>--}}
-      {{--      <div class="col-md-3">--}}
-      {{--        <div class="form-group">--}}
-      {{--          <div class="position-relative">--}}
-      {{--            <div class="form-group">--}}
-      {{--              {!! Form::text('suara3',old('suara3') ?? '',['class' => 'form-control','id' =>'suara'.$calon[2]['id'],'placeholder' =>--}}
-      {{--              'Suara']) !!}--}}
-      {{--              <div class="form-control-position">--}}
-      {{--                <i class="bx bx-calculator"></i>--}}
-      {{--              </div>--}}
-      {{--            </div>--}}
-      {{--          </div>--}}
-      {{--        </div>--}}
-      {{--      </div>--}}
+      @endif
     </div>
     <div class="form-group">
       <label for="tps-add">Suara Tidak Sah</label>

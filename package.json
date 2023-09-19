@@ -16,10 +16,10 @@
         "cross-env": "^5.1",
         "dotenv": "^16.0.1",
         "jquery": "^3.2",
-        "laravel-mix": "^5.0.1",
+        "laravel-mix": "^6.0.49",
         "lodash": "^4.17.21",
         "popper.js": "^1.12",
-        "resolve-url-loader": "^2.3.1",
+        "resolve-url-loader": "^5.0.0",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0",
         "vue-template-compiler": "^2.6.11"
@@ -27,6 +27,6 @@
     "dependencies": {
         "apexcharts": "^3.35.4",
         "glob": "^8.0.3",
-        "rtlcss": "^2.5.0"
+        "rtlcss": "^4.1.0"
     }
 }
